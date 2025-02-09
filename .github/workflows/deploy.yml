@@ -1,1 +1,15 @@
-
+name: Deploy to GCP
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/deploy-cloud-functions@v1
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          function_name: instagram-analyzer
+          runtime: python310
+          region: africa-south1
+          source_dir: ./functions
+          env_vars: INSTAGRAM_USER=${{ secrets.IG_USER }},INSTAGRAM_PASSWORD=${{ secrets.IG_PASS }}
